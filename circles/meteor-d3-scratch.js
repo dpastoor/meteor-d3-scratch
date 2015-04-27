@@ -37,7 +37,7 @@ if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
     if (Circles.find().count() === 0) {
-      Circles.insert({data:[5, 8, 11, 14, 17, 20]})
+      Circles.insert({data:[5, 8, 11, 14, 17, 20]});
     }
   });
 
