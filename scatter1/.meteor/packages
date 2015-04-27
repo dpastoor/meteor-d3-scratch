@@ -8,4 +8,4 @@ meteor-platform
 autopublish
 insecure
 d3
-nvd3:nvd3
+mrt:nvd3js
