@@ -1,23 +1,48 @@
+var Circles = new Meteor.Collection('circles');
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
+  Template.vis.rendered = function () {
+      var svg, width = 500, height = 75, x;
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
-    }
-  });
+      svg = d3.select('#circles').append('svg')
+        .attr('width', width)
+        .attr('height', height);
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
-    }
-  });
+      var drawCircles = function (update) {
+        var data = Circles.findOne().data;
+        var circles = svg.selectAll('circle').data(data);
+        if (!update) {
+          circles = circles.enter().append('circle')
+            .attr('cx', function (d, i) { return x(i); })
+            .attr('cy', height / 2);
+        } else {
+          circles = circles.transition().duration(1000);
+        }
+        circles.attr('r', function (d) { return d; });
+      };
+
+      Circles.find().observe({
+        added: function () {
+          x = d3.scale.ordinal()
+            .domain(d3.range(Circles.findOne().data.length))
+            .rangePoints([0, width], 1);
+          drawCircles(false);
+        },
+        changed: _.partial(drawCircles, true)
+      });
+    };
+
 }
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
+    if (Circles.find().count() === 0) {
+      Circles.insert({data:[5, 8, 11, 14, 17, 20]})
+    }
   });
+
+  Meteor.setInterval(function () {
+    var newData = _.shuffle(Circles.findOne().data);
+    Circles.update({}, {data: newData});
+    }, 2000);
 }

@@ -7,3 +7,5 @@
 meteor-platform
 autopublish
 insecure
+nvd3:nvd3
+underscore
