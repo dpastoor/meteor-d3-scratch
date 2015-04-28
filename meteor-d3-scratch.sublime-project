@@ -1,0 +1,16 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	], 
+         // add this! ternjs object
+    "ternjs": {
+        "libs": ["browser", "underscore", "jquery"],
+        "exclude": [".meteor/**", "node_modules/**"],
+        "plugins": {
+            "meteor": {}
+        }
+    }
+}
