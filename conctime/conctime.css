@@ -10,3 +10,8 @@ text {
           height: 100%;
           width: 100%;
       }
+      #chart g.nv-scatter path.nv-point
+      {
+          fill-opacity: 1;
+          stroke-opacity: 1;
+      }
