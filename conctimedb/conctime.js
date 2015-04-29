@@ -3,12 +3,27 @@
 if (Meteor.isClient) {
   Template.chart.rendered = function() {
 
+_initialize();
+
+function _initialize() {
+
+  Data.find().observe({
+    changed:function(bar) {
+      console.log("changed!");
+      console.log("removing old chart");
+
+      renderChart();
+    }
+  });
   Tracker.autorun(function() {
-    console.log('running again!');
+    console.log('running again from autorun!');
     renderChart();
   });
-  function renderChart() {
+}
 
+  function renderChart() {
+    console.log("rendering chart!");
+    console.log(Data.findOne().data);
     nv.addGraph(function() {
     var chart = nv.models.lineChart();
     var fitScreen = false;
@@ -18,7 +33,8 @@ if (Meteor.isClient) {
     // currently a bug where if new data is added and refreshed get
     //property data undefined and by just adding a space etc here resaving so meteor
     // updates the chart will re-render properly
-
+      console.log("inside nv.addGraph");
+      console.log(Data.findOne().data);
       var data = Data.findOne().data;
 
 
@@ -37,7 +53,7 @@ if (Meteor.isClient) {
           .attr('perserveAspectRatio', 'xMinYMid')
           .attr('width', width)
           .attr('height', height)
-          .datum(data);
+          .data([data]);
       setChartViewBox();
       resizeChart();
       nv.utils.windowResize(resizeChart);
@@ -117,6 +133,8 @@ if (Meteor.isServer) {
         ]
 
       });
+      console.log("new data added!");
+      console.log(Data.findOne());
     }
   });
 }
