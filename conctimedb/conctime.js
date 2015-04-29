@@ -12,19 +12,16 @@ function _initialize() {
       console.log("changed!");
       console.log("removing old chart");
 
-      renderChart();
+      loadChart();
     }
-  });
-  Tracker.autorun(function() {
-    console.log('running again from autorun!');
-    renderChart();
   });
 }
 
-  function renderChart() {
     console.log("rendering chart!");
     console.log(Data.findOne().data);
-    nv.addGraph(function() {
+    nv.addGraph(loadChart);
+
+    function loadChart() {
     var chart = nv.models.lineChart();
     var fitScreen = false;
     var width = 600;
@@ -33,7 +30,7 @@ function _initialize() {
     // currently a bug where if new data is added and refreshed get
     //property data undefined and by just adding a space etc here resaving so meteor
     // updates the chart will re-render properly
-      console.log("inside nv.addGraph");
+      console.log("inside loadChart");
       console.log(Data.findOne().data);
       var data = Data.findOne().data;
 
@@ -99,9 +96,7 @@ function _initialize() {
           }
       }
       return chart;
-    });
-
-  }
+    }
 
 };
 
