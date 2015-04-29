@@ -8,10 +8,8 @@ _initialize();
 function _initialize() {
 
   Data.find().observe({
-    changed:function(bar) {
+    changed:function() {
       console.log("changed!");
-      console.log("removing old chart");
-
       loadChart();
     }
   });
@@ -20,7 +18,12 @@ function _initialize() {
     console.log("rendering chart!");
     console.log(Data.findOne().data);
     nv.addGraph(loadChart);
-
+// note on why it seems to work now:
+// the 'trick' was that nv.addGraph takes a callback, which was not fired
+// even though the parent 'renderChart' function was, so instead I took out
+// the chart creation and then called loadChart so that will create the initial chart
+// then on subsequent data changes chart is loaded directly with loadChart.
+// May NOT actually even need the call to nv.addGraph?
     function loadChart() {
     var chart = nv.models.lineChart();
     var fitScreen = false;
