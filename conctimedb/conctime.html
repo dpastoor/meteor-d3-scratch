@@ -2,15 +2,23 @@
   <title>Conc-Time</title>
 </head>
 
-
 <body>
   <h1>Simple meteor d3 example!</h1>
-  {{> chart}}
+  {{> OuterChart}}
 </body>
 
-<template name="chart">
+<template name="OuterChart">
+ {{#if Template.subscriptionsReady}}
+ ready!
+ {{> Chart}}
+ {{else}}
+ Loading...
+ {{/if}}
 
-  <div id="chart">
-    <svg style="height:400px;width:700px"/>
-  </div>
+</template>
+
+<template name = "Chart"> 
+<div id="chart">
+	<svg></svg>
+</div>
 </template>

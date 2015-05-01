@@ -1,11 +1,13 @@
   Data = new Meteor.Collection("Data");
 
 if (Meteor.isClient) {
-  Template.chart.rendered = function() {
+  Template.OuterChart.onCreated(function() {
+  this.subscribe("Data");
+});
 
-_initialize();
 
-function _initialize() {
+  Template.Chart.onRendered(function() {
+ console.log("rendering!");
 
   Data.find().observe({
     changed:function() {
@@ -13,8 +15,6 @@ function _initialize() {
       loadChart();
     }
   });
-}
-
     console.log("rendering chart!");
     console.log(Data.findOne().data);
     nv.addGraph(loadChart);
@@ -101,7 +101,7 @@ function _initialize() {
       return chart;
     }
 
-};
+});
 
 
 }
@@ -135,4 +135,8 @@ if (Meteor.isServer) {
       console.log(Data.findOne());
     }
   });
+  Meteor.publish('Data', function() {
+      return Data.find();
+  });
 }
+
