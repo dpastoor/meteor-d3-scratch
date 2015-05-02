@@ -15,7 +15,7 @@ if (Meteor.isClient) {
       loadChart();
     }
   });
-    console.log("rendering chart!");
+
     console.log(Data.findOne().data);
     nv.addGraph(loadChart);
 // note on why it seems to work now:
@@ -71,19 +71,19 @@ if (Meteor.isClient) {
               .call(chart);
       }
       function zoomOut() {
-          zoom += .25;
+          zoom += 0.25;
           setChartViewBox();
       }
       function zoomIn() {
-          if (zoom <= .5) return;
-          zoom -= .25;
+          if (zoom <= 0.5) return;
+          zoom -= 0.25;
           setChartViewBox();
       }
       // This resize simply sets the SVG's dimensions, without a need to recall the chart code
       // Resizing because of the viewbox and perserveAspectRatio settings
       // This scales the interior of the chart unlike the above
       function resizeChart() {
-          var container = d3.select('#chart1');
+          var container = d3.select('#chart');
           var svg = container.select('svg');
           if (fitScreen) {
               // resize based on container's width AND HEIGHT
