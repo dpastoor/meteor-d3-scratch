@@ -17,27 +17,13 @@ d3.csv("data/concTimeSmall.csv", function(data) {
 
   var idat = _.groupBy(data, 'ID');
 
-var chartData = _.map(idat, function(d) {
-  console.log('inside forEach');
-  var obj = _.object(['values'], [d]);
-  obj.key = d[1].ID;
-  obj.color = '#000000';
-  console.log(obj);
-  return obj;
- 
-});
-
-console.log("chartdata");
-console.log(chartData);
-console.log("idat")
-console.log(idat);
-
-console.log({"data": chartData});
-
-
-
-  // console.log("idat values: ");
-  //console.log(idat);
+  var chartData = _.map(idat, function(d) {
+    var obj = _.object(['values'], [d]);
+    obj.key = d[1].ID;
+    obj.color = '#000000';
+    return obj;
+   
+  });
 
 });
 
