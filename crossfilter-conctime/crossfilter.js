@@ -28,18 +28,20 @@ if (Meteor.isClient) {
           // Create the crossfilter for the relevant dimensions and groups.
           var idDat = crossfilter(idData),
               all = idDat.groupAll(),
-              id = idDat.dimension(function(d) { 
-                  console.log(d.ID);
-                return Math.max(0, d.ID); }),
+              id = idDat.dimension(function(d) {return Math.max(0, d.ID); }),
               ids = id.group(function(d) {return Math.floor(d.ID) }),
               age = idDat.dimension(function(d) { return Math.max(0, d.AGE); }),
-              ages = age.group(function(d) { return Math.floor(d / 5) * 10; }),
+              ages = age.group(function(d) { return Math.floor(d / 5) * 5; }),
               weight = idDat.dimension(function(d) { return Math.max(0, d.WEIGHT); }),
               weights = weight.group(function(d) { return Math.floor(d / 5) * 5; }),
               cmax = idDat.dimension(function(d) { return Math.max(0, d.CMAX); }),
               cmaxs = cmax.group(function(d) { return Math.floor(d / 10) * 10; }),
               auc = idDat.dimension(function(d) { return Math.max(0, d.AUC); }),
               aucs = auc.group(function(d) { return Math.floor(d / 50) * 50; });
+
+              console.log("max age:")
+              console.log(Math.max.apply(Math, idData.map(function(d) {return d.AGE})));
+
           var charts = [
             barChart()
                 .dimension(cmax)
@@ -52,13 +54,20 @@ if (Meteor.isClient) {
                 .group(weights)
               .x(d3.scale.linear()
                 .domain([40, 100])
-                .rangeRound([0, 10 * 21])),
+                .rangeRound([0, 10 * 20])),
             barChart()
                 .dimension(auc)
                 .group(aucs)
               .x(d3.scale.linear()
                 .domain([0, 1500])
-                .rangeRound([0, 10 * 40]))
+                .rangeRound([0, 10 * 40])),
+            barChart()
+                .dimension(age)
+                .group(ages)
+              .x(d3.scale.linear()
+                .domain([35, Math.max.apply(Math, idData.map(function(d) {return d.AGE}))+1])
+                .rangeRound([0, 10 * 20]))
+              // id doesn't work due to only 1 person per group so will need to use a different strategy
           ];
           // Given our array of charts, which we assume are in the same order as the
           // .chart elements in the DOM, bind the charts to the DOM and render them.
@@ -142,6 +151,7 @@ if (Meteor.isClient) {
             function chart(div) {
               var width = x.range()[1],
                   height = y.range()[0];
+                  //perhaps for id to work can add a check for y domain and give a min value of 1 if only 1
               y.domain([0, group.top(1)[0].value]);
               div.each(function() {
                 var div = d3.select(this),
