@@ -4,13 +4,24 @@
 
 <body>
   <h1>Welcome to Meteor!</h1>
+         {{#if Template.subscriptionsReady}}
+                {{> OuterChart}}
+         {{else}}
+                 Loading...
+         {{/if}}
 
-  {{> charts}}
+
 </body>
 
-<template name="charts">
+<template name="OuterChart">
+        {{#if Template.subscriptionsReady}}
+        {{> Chart}}
+        {{else}}
+        Loading...
+        {{/if}}
+</template>
 
-
+<template name="Chart">
 <div id="charts">
   <div id="hour-chart" class="chart">
     <div class="title">Time of Day</div>
