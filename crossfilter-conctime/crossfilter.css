@@ -51,9 +51,6 @@ h1, h2 {
 .background.bar {
   fill: #ccc;
 }
-.foreground.bar {
-  fill: steelblue;
-}
 .axis path, .axis line {
   fill: none;
   stroke: #000;
